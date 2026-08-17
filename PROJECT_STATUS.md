@@ -1,370 +1,200 @@
-# JanaFitness – stav projektu
+# JanaFitness - aktuální stav projektu
 
 Aktualizováno: 2026-08-17
 
-Tento dokument shrnuje produktová rozhodnutí, implementovaný stav z dosavadní práce a zbývající úkoly. Slouží jako kontrolní seznam a zdroj pravdy pro další vývoj.
+Tento dokument je kontrolní seznam projektu. Rozlišuje skutečný stav GitHubu, poslední ověřený migrační kandidát a věci, které ještě nejsou hotové.
 
-> DŮLEŽITÉ: GitHub `main` zatím neobsahuje kompletní aplikační zdrojový kód. Obsahuje pouze inicializační soubory repozitáře. Poslední funkční změny existují v lokálních handoff balících z konverzace a musí být jednorázově importovány do tohoto repozitáře. Do té doby nelze označit žádnou z níže uvedených implementací za součást `main` ani za nasazenou produkci.
+## Legenda
 
-## 1. Produkční architektura – rozhodnuto
+- **MAIN**: je skutečně v `czmajkl/JanaFitness` na větvi `main`.
+- **CANDIDATE**: je implementováno a zdrojově ověřeno v posledním lokálním migračním kandidátu, ale ještě není importováno do GitHub `main`.
+- **TODO**: chybí nebo vyžaduje další práci.
+- **DEPLOY**: týká se nasazení na Active24.
 
-- [x] Active24 Webhosting Simple zůstává hostingem.
-- [x] Frontend zůstává moderní: Next.js + React + TypeScript + Tailwind.
-- [x] Frontend se pro Active24 vybuildí jako statický export.
-- [x] Dynamický backend bude PHP JSON API.
-- [x] Databáze bude MySQL/MariaDB na Active24.
-- [x] OpenAI API bude používáno pro strukturované tréninkové plány.
-- [x] Stripe bude použit pro online platby.
-- [x] E-maily budou řešené přes serverovou frontu (`email_outbox`) a následně SMTP.
-- [x] Active24 Shell/cron má sloužit pro background úlohy, e-mail worker a případně AI jobs.
-- [x] GitHub `main` má být jediný zdroj pravdy.
-- [x] Deploy ZIP má vždy vzniknout z konkrétního commit SHA.
-- [ ] Jednorázově importovat kompletní současný projekt do `main`.
-- [ ] Ověřit skutečné možnosti Active24 Shellu: Node, npm, PHP, Composer, Git, cron.
+## Kritický stav repozitáře
 
-## 2. Verzování a deployment
+- [x] **MAIN** Repo `czmajkl/JanaFitness` existuje a je zapisovatelné.
+- [x] **MAIN** `README.md`, `PROJECT_STATUS.md` a `DEPLOYED_VERSION` existují.
+- [ ] **TODO P0** Kompletní aplikační zdrojový kód stále není v `main`.
+- [ ] **TODO P0** Jednorázově importovat aktuální migrační kandidát včetně binárních obrázků a assetů.
+- [ ] **DEPLOY** `DEPLOYED_VERSION` je stále `not-deployed-yet`.
+- [ ] **TODO** Po importu už nepokračovat z žádného staršího ZIPu. `main` bude jediný zdroj pravdy.
 
-- [x] Repo `czmajkl/JanaFitness` založené a dostupné pro zápis.
-- [x] `README.md` obsahuje základní pravidla verzování/deploye.
-- [x] `DEPLOYED_VERSION` existuje.
-- [ ] Kompletní zdrojový kód ještě není v repu.
-- [ ] `DEPLOYED_VERSION` je stále `not-deployed-yet`.
-- [ ] Připravit reprodukovatelný build/deploy ZIP workflow.
-- [ ] Každý deploy pojmenovat podle SHA, např. `janafitness-a1b2c3d.zip`.
-- [ ] Po nasazení zapsat SHA do `DEPLOYED_VERSION`.
-- [ ] Databázové migrace aplikovat podle konkrétního deploye.
+Dokud není P0 hotové, žádná funkce označená jako CANDIDATE není oficiálně součástí GitHub `main` ani potvrzené produkce.
 
-## 3. Veřejný web / UX
+## 1. Vstupní dotazník
 
-Rozhodnuto a v posledním lokálním balíku implementováno:
+Zdrojová šablona je dodaný dokument `Onboardový formulář klienta`. Obsah musí zachovat jeho věcnou strukturu a může zlepšit pouze UX, podmíněnost a prezentaci.
 
-- [x] Odstranit nefunkční tlačítko „Zobrazit ceník“.
-- [x] Blok „Plán na míru / Průběžná podpora / Bez dojíždění“ přesunout pod online ceník.
-- [x] Opravit rozbité české znaky typu `Výkon`, `Balíček 5 lekcí` apod.
-- [x] Přidat UTF-8 kontroly a používat `utf8mb4` v DB vrstvě.
-- [x] Kontaktní e-mail všude sjednotit na `jana@janafitnessrada.cz`.
-- [x] Telefon všude sjednotit na `+420 774 641 541`.
-- [x] „Napište Janě“ má zobrazovat e-mail i telefon a zpráva má směřovat na Janin e-mail.
-- [ ] Po importu do GitHubu znovu projít celý frontend na mojibake/UTF-8 chyby.
-- [ ] Ověřit všechny CTA na živém buildu.
+- [x] **CANDIDATE** Dotazník má 9 sekcí: osobní údaje, zdravotní anamnéza, cíle a motivace, zdatnost a historie, čas a dny, vybavení, strava a doplňky, doplňující informace, souhlasy.
+- [x] **CANDIDATE** Obsahuje věk, výšku a váhu.
+- [x] **CANDIDATE** Zachovává zdravotní otázky, sportovní historii, tělesné parametry, dostupnost, vybavení, stravovací návyky a souhlasy z dodané šablony.
+- [x] **CANDIDATE** Předěláno na interaktivní průvodce po 9 krocích místo jednoho dlouhého formuláře.
+- [x] **CANDIDATE** Progress indikátor, navigace mezi sekcemi a validace povinných odpovědí po kroku.
+- [x] **CANDIDATE** Mobilní zobrazení dostupnosti den x část dne je responzivní.
+- [x] **CANDIDATE** Single choice, boolean a multi choice odpovědi mají přehlednější card/pill UI.
+- [x] **CANDIDATE** Odeslaný dotazník je neměnný snapshot.
+- [x] **CANDIDATE** Hotový dotazník je v klientské zóně zelený.
+- [x] **CANDIDATE** Hotový dotazník lze zobrazit, ne přímo přepsat.
+- [x] **CANDIDATE** CTA `Vyplnit znovu` vytvoří novou verzi a stará zůstane uložená.
+- [x] **CANDIDATE** Administrace umí načíst historii verzí dotazníku.
+- [x] **CANDIDATE** Jana může v administraci přepínat mezi verzemi.
+- [x] **CANDIDATE** Přidané CTA `Stáhnout dotazník JSON`.
+- [x] **CANDIDATE** Přidané CTA `Stáhnout dotazník Word` jako Word-kompatibilní `.doc` export s UTF-8.
+- [ ] **TODO** Pokud má být export skutečný `.docx` soubor podle přesného vizuálu původní šablony, doplnit serverový generátor DOCX. Současný export je Word-kompatibilní `.doc`, nikoli nativní `.docx`.
+- [ ] **TODO** Dotáhnout modulární dotazník `common + online + personal`, aby uživatel při změně služby neopakoval známé údaje.
 
-## 4. Účet a autentizace
+## 2. Stav po odeslání dotazníku
 
-Rozhodnuto / implementováno v posledním lokálním balíku:
+- [x] **CANDIDATE** Samotné odeslání dotazníku automaticky nezakládá free trial.
+- [x] **CANDIDATE** Po odeslání následuje motivační success stav, ne mrtvý návrat na dashboard.
+- [x] **CANDIDATE** Uživatel bez produktu dostane volbu Online coaching / Osobní trénink.
+- [x] **CANDIDATE** Online větev nabízí 7 dní zdarma nebo placený měsíční balíček.
+- [x] **CANDIDATE** Pokud uživatel už zaplatil, success stav ho znovu nenutí nakupovat a sdělí, že Jana má podklady pro přípravu plánu.
+- [ ] **TODO** Finální vizuální kontrola success flow po skutečném Next buildu.
 
-- [x] Registrace uživatele.
-- [x] Přihlášení.
-- [x] Minimální délka hesla nastavena na 5 znaků.
-- [x] Horní limit hesla zůstává vyšší; hesla nejsou omezena na max. 10 znaků.
-- [x] Password recovery přes jednorázový token.
-- [x] Resetovací token má omezenou platnost a jednorázové použití.
-- [ ] Ověření e-mailové adresy po registraci není dokončené.
-- [ ] Změna hesla z přihlášeného profilu není dokončená.
-- [ ] Recovery e-mail musí být ověřen na skutečném SMTP.
+## 3. Autentizace a účet
 
-## 5. Produktový model – účet není produkt
+- [x] **CANDIDATE** Registrace a přihlášení.
+- [x] **CANDIDATE** Minimální délka hesla je 5 znaků ve frontendu i PHP validaci.
+- [x] **CANDIDATE** `Zapomenuté heslo` a password recovery jsou přítomné.
+- [x] **CANDIDATE** Reset používá jednorázový token s omezenou platností.
+- [x] **CANDIDATE** V klientské zóně je logo odkazující na hlavní web a vedle něj text `Uživatelský účet`.
+- [x] **CANDIDATE** Mobilní navigace účtu je kompaktnější.
+- [ ] **TODO** Ověření e-mailu po registraci.
+- [ ] **TODO** Změna hesla z přihlášeného účtu.
+- [ ] **TODO** Otestovat recovery e-mail na skutečném SMTP.
 
-Rozhodnuto:
+## 4. Veřejný web a CTA
 
-- [x] Uživatel má jeden účet.
-- [x] Z účtu si vybírá službu: online coaching nebo osobní trénink.
-- [x] Onboarding, nákup a čerpání služby jsou oddělené kroky.
-- [x] Online coaching a osobní trénink mají odlišný lifecycle.
+- [x] **CANDIDATE** Nefunkční `Zobrazit ceník` je odstraněné.
+- [x] **CANDIDATE** `Plán na míru / Průběžná podpora / Bez dojíždění` je až pod online ceníkem.
+- [x] **CANDIDATE** Header CTA `Vybrat balíček` vede na `/online-coaching/#cenik`.
+- [x] **CANDIDATE** CTA na kartách balíčků vedou na platební podstránku s vybraným balíčkem.
+- [x] **CANDIDATE** Hlavní mobilní CTA byla zmenšena a nemají zbytečně zabírat celý viewport.
+- [x] **CANDIDATE** Kontaktní formulář má kompaktnější mobilní submit tlačítko.
+- [x] **CANDIDATE** Zdrojový sweep odstranil znak em dash z aplikačního kódu a veřejných textů. Interní `AGENTS.md` se tímto pravidlem neřídí.
+- [ ] **TODO** Po build/importu zkontrolovat všechny CTA v reálném mobilním viewportu a na fyzickém telefonu.
 
-Doporučený hlavní flow:
+## 5. Reference a příběhy
 
-`Účet -> výběr služby -> onboarding -> výběr/nákup produktu -> čerpání služby`
+- [x] **CANDIDATE** Text `Reference se sbírají` byl nahrazen příběhovými kartami se jmény bez fotek.
+- [x] **CANDIDATE** Použité příběhy jsou transparentně označené jako ukázkové příběhy, ne jako tvrzené skutečné klientské reference.
+- [ ] **TODO** Až budou skutečné reference, nahradit ukázkové příběhy odsouhlasenými citacemi a případně fotkami.
 
-## 6. Vstupní dotazník
+## 6. Kontakt a zprávy
 
-Základem dotazníku je dokument „Onboardový formulář klienta“ dodaný v konverzaci.
+- [x] **CANDIDATE** Kontaktní e-mail je `jana@janafitnessrada.cz`.
+- [x] **CANDIDATE** Telefon je `+420 774 641 541`.
+- [x] **CANDIDATE** `Napište Janě` zobrazuje kontakt a backendová notifikace směřuje na Janin e-mail.
+- [x] **CANDIDATE** Nepřečtené zprávy klienta/Jany jsou oranžově zvýrazněné.
+- [x] **CANDIDATE** Po otevření se pracuje se stavem přečtení.
+- [ ] **TODO** Ověřit na produkci skutečné doručení kontaktního formuláře a zpráv přes SMTP/outbox.
 
-Rozhodnuto / implementováno v posledním lokálním balíku:
+## 7. Online coaching
 
-- [x] Dotazník rozdělen na logické sekce: osobní údaje, zdravotní anamnéza, cíle, sportovní historie, dostupnost, vybavení, strava, doplňující informace, souhlasy.
-- [x] Přidat věk, výšku a váhu.
-- [x] Jméno/e-mail lze převzít z účtu místo opakovaného zadávání.
-- [x] Podmíněné otázky jsou podporované.
-- [x] Dostupnost tréninku má podporovat den × část dne.
-- [x] Zdravotní odpovědi mohou vynutit ruční kontrolu plánu.
-- [x] Po odeslání je dotazník zeleně označený jako hotový.
-- [x] Hotový dotazník se už neupravuje přímo.
-- [x] Uživatel může starý dotazník zobrazit.
-- [x] CTA „Vyplnit znovu“ vytvoří novou verzi.
-- [x] Starší verze zůstávají uložené a dohledatelné.
-- [x] Samotné odeslání dotazníku automaticky nezakládá free trial.
-- [ ] Dotazníky podle tieru/služby nejsou plně dotažené.
-- [ ] Potřebujeme definovat společnou část + online část + osobní část.
-- [ ] Při přechodu mezi službami znovu použít již známé údaje a chtít pouze chybějící odpovědi.
+- [x] **CANDIDATE** Účet, onboarding, produkt a čerpání jsou oddělené koncepty.
+- [x] **CANDIDATE** Free trial se nespouští registrací ani samotným odesláním dotazníku.
+- [x] **CANDIDATE** Uživatel musí explicitně zvolit 7 dní zdarma.
+- [x] **CANDIDATE** 7 dní začne až publikací plánu Janou.
+- [x] **CANDIDATE** Placený balíček lze koupit před dotazníkem.
+- [x] **CANDIDATE** Placené období začne až publikací plánu, ne platbou.
+- [x] **CANDIDATE** Dashboard rozlišuje čekání na dotazník, čekání na plán, aktivní a ukončené období.
+- [ ] **TODO** Připomínka klientovi před koncem období.
+- [ ] **TODO** Recurring Stripe subscription není připravené. První verze zůstává jednorázová měsíční platba.
 
-## 7. Success stránka po dotazníku
+## 8. AI plán a administrace Jany
 
-Rozhodnuto / v posledním lokálním balíku částečně implementováno:
+- [x] **CANDIDATE** Plan Schema v2 je flexibilní a nevyžaduje katalog cviků.
+- [x] **CANDIDATE** AI rozhoduje o konkrétním tréninkovém obsahu. Schema určuje strukturu pro validaci a renderer.
+- [x] **CANDIDATE** Jana vidí dotazník klienta.
+- [x] **CANDIDATE** Jana může připravit/kopírovat AI prompt.
+- [x] **CANDIDATE** Jana může vložit nebo nahrát JSON plánu.
+- [x] **CANDIDATE** Server JSON validuje a vrací konkrétní cestu chyby.
+- [x] **CANDIDATE** Jana vidí náhled stejným rendererem jako klient.
+- [x] **CANDIDATE** Publikace plánu aktivuje příslušné období.
+- [x] **CANDIDATE** Zdravotní odpovědi mohou vynutit ruční kontrolu.
+- [ ] **TODO** Otestovat několik reálných AI plánů různých typů před produkcí.
 
-- [x] Po odeslání dotazníku nemá uživatel skončit pouze na dashboardu.
-- [x] Má vidět motivační zakončení typu „Je to tam! První krok máte za sebou.“
-- [x] Pokud ještě nic nekoupil, následuje výběr služby: Online coaching / Osobní trénink.
-- [x] U online větve následuje volba: 7 dní zdarma / měsíční placený balíček.
-- [x] Pokud už placený online balíček koupil před dotazníkem, success stránka nemá znovu prodávat produkt; má potvrdit, že Jana má vše potřebné a připravuje plán.
-- [ ] Finální texty a vizuální návrh success stránky ještě projít v produkčním buildu.
+## 9. Payment page
 
-## 8. Online coaching – 7 dní zdarma
+Aktuální směr je samostatná platební podstránka, nikoli okamžitý Stripe API call z tlačítka balíčku.
 
-Rozhodnuto:
-
-- [x] Bezplatný týden není automatický po registraci.
-- [x] Bezplatný týden není automatický po pouhém odeslání dotazníku.
-- [x] Uživatel musí explicitně zvolit „7 dní zdarma“.
-- [x] Bez dotazníku se free plán nepřipravuje.
-- [x] Po výběru free varianty vznikne stav `waiting_for_plan`.
-- [x] Jana připraví plán a nahraje/publikuje JSON.
-- [x] Sedmidenní platnost začne až publikací plánu, ne registrací ani odesláním dotazníku.
-- [x] U plánu musí být jasně napsané, že je pouze na 7 dní.
-- [x] Dashboard má zobrazovat začátek, konec a zbývající dobu.
-- [x] Po skončení se účet nemaže; nabídne se pokračování placeným balíčkem.
-- [ ] Finální UI 7denního plánu je potřeba ověřit po skutečném Next buildu.
-- [ ] E-mail před koncem trialu ještě není dokončený.
-
-## 9. Placený online coaching
-
-Rozhodnuto:
-
-- [x] Uživatel může koupit placený online balíček i před vyplněním dotazníku.
-- [x] Po platbě bez dotazníku má být výrazné CTA na vyplnění dotazníku.
-- [x] Balíček zůstává ve stavu „čeká na dotazník / plán“.
-- [x] Po odeslání dotazníku přejde na „čeká na plán“.
-- [x] Jana dostane podklady a připraví plán.
-- [x] Platnost placeného období začne až publikací/nahráním plánu.
-- [x] Administrace má zobrazovat datum platby, nahrání plánu, začátek a konec období.
-- [x] Pro první verzi používat měsíční balíček jako jednorázovou platbu.
-- [ ] Automatické recurring subscription není dokončené.
-- [ ] Před zapnutím recurring musí webhook založit nový coachingový měsíc / nový úkol pro Janu.
+- [x] **CANDIDATE** Existuje samostatná `/app/platba/` podstránka.
+- [x] **CANDIDATE** Zobrazuje rekapitulaci balíčku a cenu.
+- [x] **CANDIDATE** Obsahuje volbu Stripe a QR platba.
+- [x] **CANDIDATE** QR je zatím placeholder.
+- [x] **CANDIDATE** Platby jsou v development režimu a stránka místo technického erroru vysvětluje, že web je ve vývoji a pro nákup má uživatel kontaktovat Janu.
+- [x] **CANDIDATE** Na payment page je Janin e-mail a telefon.
+- [ ] **TODO NEXT** Udělat kompletní UX review payment page.
+- [ ] **TODO NEXT** Doplnit finální fakturační údaje Jany, IČO a adresu.
+- [ ] **TODO NEXT** Doplnit bankovní účet a skutečná data pro QR kód.
+- [ ] **TODO NEXT** Nakonfigurovat Stripe secret + webhook secret mimo repozitář.
+- [ ] **TODO NEXT** Otestovat payment success, cancel, webhook a idempotenci.
+- [ ] **TODO NEXT** Teprve potom zapnout skutečné platby.
 
 ## 10. Osobní trenérství
 
-Produktově rozhodnuto, ale implementace není dokončená:
+- [x] **ROZHODNUTO** Osobní trenérství je samostatná produktová větev.
+- [x] **ROZHODNUTO** Má evidovat počet lekcí, ne kopírovat online period lifecycle.
+- [ ] **TODO** Datový model `sessions_total / sessions_used / sessions_remaining`.
+- [ ] **TODO** Nákup osobního balíčku.
+- [ ] **TODO** Rezervace/termíny a evidence čerpání.
+- [ ] **TODO** Samostatná personal část dotazníku navázaná na common profil.
 
-- [x] Osobní trenérství má být samostatná větev od online coachingu.
-- [x] Nemá slepě používat stejný lifecycle jako online plán.
-- [x] Produkty mohou být např. jednorázová lekce, 5 lekcí, 10 lekcí.
-- [x] Pro osobní trénink dává smysl evidovat `sessions_total`, `sessions_used`, `sessions_remaining`.
-- [x] Osobní onboarding má obsahovat cíl, místo, dostupnost/termíny, zdravotní omezení a kontakt.
-- [ ] Databázový lifecycle osobních balíčků není dokončený.
-- [ ] Chybí evidence čerpání jednotlivých lekcí.
-- [ ] Chybí rezervace/termíny.
-- [ ] Chybí finální osobní checkout flow.
+## 11. E-mailový systém
 
-## 11. AI plán – zásadní pravidlo
+- [x] **CANDIDATE** Existuje `email_outbox` základ a worker.
+- [x] **CANDIDATE** Události jsou připravené pro dotazník, platbu, novou zprávu, publikaci plánu a password recovery.
+- [ ] **TODO** Přepnout/ověřit ostré SMTP.
+- [ ] **TODO** Nastavit cron na Active24.
+- [ ] **TODO** Retry strategie a monitoring chyb.
+- [ ] **TODO** E-mail před koncem plánu.
 
-Rozhodnuto:
+## 12. Kvalita, UTF-8 a build
 
-- [x] JSON schema neurčuje konkrétní cviky ani tréninkový obsah.
-- [x] AI rozhoduje o cvicích, technice, sériích, opakováních, tempu, pauzách, RIR/RPE, intenzitě, intervalech, názvech sekcí a dalších obsahových detailech.
-- [x] JSON definuje pouze mantinely/prezentační strukturu, kterou frontend umí zobrazit.
-- [x] Není povinný katalog cviků.
-- [x] Frontend má být pružný a zobrazit jen relevantní pole.
-- [x] Schema musí být verzované (`schema_version`).
-- [x] Systémová metadata neřídí AI: user ID, tier, registrace, upload/publikace, `valid_from`, `valid_until`, payment/subscription status.
+- [x] **CANDIDATE** PHP syntaxe po posledním review prochází.
+- [x] **CANDIDATE** 51 TS/TSX souborů prošlo lokální syntax/import kontrolou.
+- [x] **CANDIDATE** UTF-8 kontrola prošla na 104 souborech.
+- [x] **CANDIDATE** V aplikačních textech nebyly po review nalezené staré BagiraSys kontakty ani mojibake vzory.
+- [ ] **TODO P1** Full `npm install` a `next build` nebyly v tomto prostředí ověřené.
+- [ ] **TODO P1** Po importu do GitHubu přidat GitHub Actions: install, typecheck, lint, source validation, Next build.
+- [ ] **TODO P1** Build artifact musí být navázaný na konkrétní commit SHA.
 
-Implementováno v posledním lokálním balíku:
+## 13. Pořadí dalších kroků
 
-- [x] Flexibilní Plan Schema v2.
-- [x] Struktura typu weeks -> days -> sections -> blocks/items.
-- [x] Podpora různých typů aktivit (exercise, superset, circuit, interval, cardio, mobility, recovery, note).
-- [x] Serverový validator.
-- [x] Chyba validace vrací konkrétní cestu v JSONu.
-- [x] Admin náhled a klient používají stejný renderer.
-- [x] Starší schema v1 má zůstat zobrazitelné.
-- [ ] Po importu do GitHubu znovu ověřit schema + renderer jako jeden celek.
-- [ ] Projít reálné AI výstupy s více typy tréninků a edge cases.
+### P0 - jediný zdroj pravdy
 
-## 12. AI workflow Jany
+1. Importovat aktuální migrační kandidát do `JanaFitness/main`, včetně assetů.
+2. Porovnat počet souborů a zkontrolovat, že nic chybí.
+3. Od tohoto okamžiku už neupravovat staré ZIPy.
 
-Rozhodnuto / implementováno v posledním lokálním balíku:
+### P1 - automatická kontrola a build
 
-- [x] Jana v administraci vidí klienta a jeho dotazník.
-- [x] Systém připraví AI prompt automaticky.
-- [x] Jana může prompt zkopírovat / stáhnout.
-- [x] Jana vloží prompt do AI.
-- [x] AI vrátí JSON.
-- [x] Jana JSON vloží nebo nahraje.
-- [x] JSON se validuje.
-- [x] Jana vidí náhled před publikací.
-- [x] Publikace aktivuje období.
-- [x] Metadata jako registrace a vytvoření/publikace plánu doplňuje systém důvěryhodnými hodnotami.
-- [ ] Automatické přímé generování přes OpenAI API je sekundární a musí být před produkcí znovu otestované.
+1. GitHub Actions pro validaci a Next build.
+2. Build ZIP pojmenovaný podle krátkého SHA.
+3. Žádný deploy z necommitnuté lokální kopie.
 
-## 13. Administrace Jany
+### P2 - nasazení
 
-Rozhodnuto / částečně implementováno:
+1. Nahrát ZIP z konkrétního SHA na Active24.
+2. Rozbalit frontend + PHP API.
+3. Aplikovat odpovídající DB migrace.
+4. Smoke test: registrace, login, recovery, dotazník, admin, zprávy, checkout page, kontakt.
+5. Zapsat skutečný SHA do `DEPLOYED_VERSION`.
 
-- [x] Detail klienta.
-- [x] Dotazník zobrazený lidsky, ne jako surová DB pole.
-- [x] Stav balíčku.
-- [x] Začátek/konec platnosti.
-- [x] AI prompt workflow.
-- [x] Upload JSON / validace / náhled / publikace.
-- [x] Nové zprávy od klientů mají být oranžově zvýrazněné.
-- [x] Administrace má ukazovat počty čekajících stavů / nových zpráv.
-- [ ] Interní „Poznámky pro trenéra“ z původního DOCX nejsou plně dotažené jako samostatná admin sekce.
-- [ ] Finální dashboard fronty práce (čeká na dotazník, čeká na plán, končí brzy atd.) ještě produkčně ověřit.
+### P3 - payment page
 
-## 14. Zprávy s Janou
+Po stabilizaci P0 až P2 dokončit platební stránku, QR, Stripe konfiguraci a payment lifecycle.
 
-Rozhodnuto / částečně implementováno:
+## Definice hotovo
 
-- [x] Klient může psát Janě.
-- [x] Jana má možnost odpovědět z administrace.
-- [x] Nepřečtená příchozí zpráva má být oranžová.
-- [x] Klientský dashboard má ukazovat oranžový stav / badge při nové zprávě.
-- [x] Admin má oranžově zvýraznit klienta s novou zprávou.
-- [x] Nová zpráva klienta má vytvořit e-mailové upozornění Janě.
-- [ ] Ověřit read/unread stav a badge end-to-end na skutečné DB.
-- [ ] Ověřit e-mailové upozornění přes SMTP.
+Funkce je `hotová` až když:
 
-## 15. E-mailový systém
+1. je v `JanaFitness/main`,
+2. prošla automatickými kontrolami,
+3. je součástí buildu z konkrétního SHA,
+4. pokud má být v produkci, je tento SHA skutečně nasazený,
+5. `DEPLOYED_VERSION` odpovídá nasazenému SHA.
 
-Rozhodnuto / částečně implementováno:
-
-- [x] Hlavní e-mail Jany: `jana@janafitnessrada.cz`.
-- [x] Kontaktní formulář / „Napište Janě“ má mířit na tento e-mail.
-- [x] Telefon Jany: `+420 774 641 541`.
-- [x] Databázová/frontová vrstva `email_outbox` byla navržena/implementována v lokálním balíku.
-- [x] Password recovery má používat email outbox.
-- [x] Dotazník -> e-mail Janě.
-- [x] Platba -> e-mail Janě.
-- [x] Nová zpráva klienta -> e-mail Janě.
-- [x] Publikace plánu -> e-mail klientovi.
-- [x] Kontakt -> e-mail Janě.
-- [ ] SMTP není produkčně nakonfigurované ani otestované.
-- [ ] Přidat potvrzení přijetí dotazníku klientovi, pokud bude chtěné ve finální UX.
-- [ ] Přidat upozornění před koncem plánu/trialu.
-- [ ] Ověřit retry chování cron workeru.
-
-## 16. Platby / payment page
-
-Rozhodnuto / implementováno v posledním lokálním balíku:
-
-- [x] „Chci balíček“ nemá házet technickou chybu „Stripe není nastavený“.
-- [x] Má vést na samostatnou payment podstránku.
-- [x] Payment stránka má obsahovat rekapitulaci balíčku a cenu.
-- [x] Má obsahovat výběr Stripe / QR platba.
-- [x] QR kód je zatím placeholder.
-- [x] Stripe je zatím viditelný jako připravovaná možnost, pokud není live.
-- [x] Na stránce má být jasná informace, že web je ve vývoji a pro nákup má uživatel kontaktovat Janu.
-- [x] Stránka má obsahovat kontakt `jana@janafitnessrada.cz` a `+420 774 641 541`.
-- [x] Má obsahovat odkazy na obchodní podmínky / GDPR.
-- [x] Skutečné platby mají být zatím bezpečně vypnuté, dokud není konfigurace hotová.
-- [ ] Doplnit IČO/fakturační údaje Jany.
-- [ ] Doplnit bankovní účet / parametry pro skutečný QR kód.
-- [ ] Nastavit Stripe secret key + webhook secret.
-- [ ] Otestovat úspěšnou i neúspěšnou platbu end-to-end.
-- [ ] Teprve potom zapnout `PAYMENTS_LIVE`.
-
-## 17. Stripe recurring payments
-
-- [x] Stripe recurring payments technicky podporuje budoucí subscription model.
-- [x] Rozhodnutí pro V1: měsíční coaching jako jednorázová platba.
-- [ ] Subscription renewal flow není implementovaný.
-- [ ] Při budoucím recurring musí každá úspěšná obnova vytvořit nový coachingový cyklus / úkol pro Janu.
-- [ ] Řešit `invoice.paid`, `invoice.payment_failed`, cancellation a customer portal.
-
-## 18. Data / databáze
-
-Implementované/rozhodnuté oblasti:
-
-- [x] Uživatelé.
-- [x] Profily klientů.
-- [x] Historie dotazníků.
-- [x] Plány a jejich verze.
-- [x] Platnost období/balíčků.
-- [x] AI jobs / koncepty.
-- [x] Zprávy.
-- [x] Check-in základ.
-- [x] Objednávky / Stripe vazby.
-- [x] Email outbox.
-- [x] `utf8mb4` jako požadovaný encoding.
-- [ ] Všechny migrace je nutné po importu seřadit, zkontrolovat a otestovat od čisté DB i při upgrade existující DB.
-- [ ] Chybí finální lifecycle osobních lekcí.
-
-## 19. Co je nyní největší technické riziko
-
-1. Kompletní zdrojový kód zatím není v GitHubu, takže nelze spolehlivě určit, co je skutečně aktuální `main`.
-2. Žádná z posledních změn není podle `DEPLOYED_VERSION` potvrzená jako nasazená na Active24.
-3. Plný `npm install` / `next build` nebyl v předchozím pracovním prostředí spolehlivě dokončen kvůli síťovému timeoutu registru.
-4. SMTP není produkčně otestované.
-5. Stripe live není nakonfigurovaný.
-6. Databázové migrace potřebují jeden konsolidační průchod.
-7. Osobní trenérství nemá dokončený produktový lifecycle.
-
-## 20. Doporučené další pořadí práce
-
-### P0 – nejdřív vyřešit zdroj pravdy
-
-- [ ] Importovat celý poslední projekt do `czmajkl/JanaFitness`.
-- [ ] Zkontrolovat, že v repu nejsou hesla/API klíče.
-- [ ] Commitnout čistý „baseline“ stav.
-- [ ] Od tohoto okamžiku všechny změny dělat pouze přes GitHub.
-
-### P1 – build a produkční základ
-
-- [ ] Rozchodit `npm ci` / lint / typecheck / build v reprodukovatelném prostředí.
-- [ ] Připravit ZIP z konkrétního SHA.
-- [ ] Ověřit Active24 Shell/cron.
-- [ ] Ověřit instalaci/migraci databáze.
-- [ ] Nasadit první sledovanou verzi a zapsat SHA do `DEPLOYED_VERSION`.
-
-### P2 – produktové flow
-
-- [ ] End-to-end test registrace -> dotazník -> success page -> free/paid online.
-- [ ] End-to-end test paid-before-intake.
-- [ ] End-to-end test Jana admin -> AI prompt -> JSON -> validace -> publikace -> aktivace období.
-- [ ] End-to-end test zpráv a unread oranžového stavu.
-
-### P3 – e-maily
-
-- [ ] Nastavit SMTP Active24.
-- [ ] Spustit cron email worker.
-- [ ] Otestovat recovery, dotazník, zprávu, publikaci plánu a payment notifikace.
-
-### P4 – platby
-
-- [ ] Doplnit firemní/fakturační údaje.
-- [ ] Doplnit bankovní údaje pro QR.
-- [ ] Nastavit Stripe test mode.
-- [ ] Otestovat checkout + webhooky.
-- [ ] Až poté zapnout live platby.
-
-### P5 – osobní trenérství
-
-- [ ] Definovat finální produkty osobního tréninku.
-- [ ] Datový model počtu lekcí.
-- [ ] Evidence čerpání.
-- [ ] Termíny/rezervace.
-- [ ] Vlastní onboarding a admin flow.
-
-## 21. Definice „hotovo“ pro další práci
-
-Funkce se nepovažuje za hotovou jen proto, že existuje tlačítko nebo komponenta. Pro každý feature blok kontrolovat:
-
-1. datový model,
-2. backend pravidla a oprávnění,
-3. frontend/UI,
-4. stavové a chybové scénáře,
-5. e-mail/notifikace, pokud relevantní,
-6. migrace,
-7. end-to-end test,
-8. commit SHA,
-9. deploy SHA v `DEPLOYED_VERSION`, pokud je nasazený.
-
-## 22. Aktuální produkční status
-
-- GitHub source import: **NEHOTOVO**
-- Reprodukovatelný Next build: **NEOVĚŘENO**
-- Databáze na Active24: **NEPOTVRZENO**
-- SMTP: **NEHOTOVO**
-- Stripe live: **VYPNUTO / NEHOTOVO**
-- QR live: **PLACEHOLDER**
-- Active24 deployment SHA: **žádný (`not-deployed-yet`)**
-
-Dokud není zdrojový kód importovaný do `main` a nasazený commit zapsaný v `DEPLOYED_VERSION`, je potřeba považovat starší ZIPy pouze za historické pracovní handoffy, ne za autoritativní produkční zdroj.
+Do té doby používáme označení CANDIDATE nebo TODO. Tím se vyhneme situaci, kdy je něco opravené v jednom ZIPu, ale nikoli na webu.
