@@ -2,6 +2,12 @@
 
 Jediný zdroj pravdy pro web Jana Fitness.
 
+## Stav projektu
+
+Aktuální přehled hotových, rozpracovaných a chybějících částí je v [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
+
+> Aktuálně repozitář ještě neobsahuje kompletní aplikační zdrojový kód. Poslední pracovní verze musí být jednorázově importována do `main`. Do té doby jsou starší ZIPy z konverzace pouze historické handoffy.
+
 ## Pravidlo verzování
 
 - `main` = aktuální schválený stav zdrojového kódu.
