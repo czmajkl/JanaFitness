@@ -6,6 +6,8 @@ Jediný zdroj pravdy pro web Jana Fitness.
 
 Aktuální přehled hotových, rozpracovaných a chybějících částí je v [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
 
+Aktuální návrh uživatelského funnelu a vizuálního směru administrace je v [`UX_ADMIN_DIRECTION.md`](UX_ADMIN_DIRECTION.md).
+
 > Aktuálně repozitář ještě neobsahuje kompletní aplikační zdrojový kód. Poslední pracovní verze musí být jednorázově importována do `main`. Do té doby jsou starší ZIPy z konverzace pouze historické handoffy.
 
 ## Pravidlo verzování
