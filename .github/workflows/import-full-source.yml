@@ -1,9 +1,8 @@
 name: Import full source
 
 on:
-  push:
-    paths:
-      - .github/workflows/import-full-source.yml
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 permissions:
@@ -13,9 +12,10 @@ jobs:
   import:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout main
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Reconstruct and validate source archive
