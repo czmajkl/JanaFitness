@@ -1,200 +1,181 @@
 # JanaFitness - aktuální stav projektu
 
-Aktualizováno: 2026-08-17
+Aktualizováno: 2026-08-18
 
-Tento dokument je kontrolní seznam projektu. Rozlišuje skutečný stav GitHubu, poslední ověřený migrační kandidát a věci, které ještě nejsou hotové.
+Tento dokument je kontrolní seznam projektu. GitHub `main` je nyní jediný zdroj pravdy pro další vývoj.
 
 ## Legenda
 
-- **MAIN**: je skutečně v `czmajkl/JanaFitness` na větvi `main`.
-- **CANDIDATE**: je implementováno a zdrojově ověřeno v posledním lokálním migračním kandidátu, ale ještě není importováno do GitHub `main`.
+- **MAIN**: implementováno v aktuálním zdrojovém kódu na `main`.
 - **TODO**: chybí nebo vyžaduje další práci.
-- **DEPLOY**: týká se nasazení na Active24.
+- **DEPLOY**: týká se nasazení a ověření na Active24.
 
-## Kritický stav repozitáře
+## 0. Repozitář a verzování
 
-- [x] **MAIN** Repo `czmajkl/JanaFitness` existuje a je zapisovatelné.
-- [x] **MAIN** `README.md`, `PROJECT_STATUS.md` a `DEPLOYED_VERSION` existují.
-- [ ] **TODO P0** Kompletní aplikační zdrojový kód stále není v `main`.
-- [ ] **TODO P0** Jednorázově importovat aktuální migrační kandidát včetně binárních obrázků a assetů.
-- [ ] **DEPLOY** `DEPLOYED_VERSION` je stále `not-deployed-yet`.
-- [ ] **TODO** Po importu už nepokračovat z žádného staršího ZIPu. `main` bude jediný zdroj pravdy.
-
-Dokud není P0 hotové, žádná funkce označená jako CANDIDATE není oficiálně součástí GitHub `main` ani potvrzené produkce.
+- [x] **MAIN** Kompletní aplikační zdrojový kód je importovaný do `czmajkl/JanaFitness`.
+- [x] **MAIN** Frontend, PHP API, databázové migrace, veřejné assety, obrázky a favicon jsou součástí repozitáře.
+- [x] **MAIN** Dočasný bootstrap použitý pro import je odstraněný.
+- [x] **MAIN** `README.md`, `PROJECT_STATUS.md`, `UX_ADMIN_DIRECTION.md` a `DEPLOYED_VERSION` existují.
+- [x] **MAIN** Další práce se dělá pouze proti GitHub `main`.
+- [ ] **DEPLOY** Aktuální `main` ještě není potvrzený jako nasazený na Active24.
+- [ ] **DEPLOY** Po prvním novém deployi zapsat skutečný commit SHA do `DEPLOYED_VERSION`.
 
 ## 1. Vstupní dotazník
 
-Zdrojová šablona je dodaný dokument `Onboardový formulář klienta`. Obsah musí zachovat jeho věcnou strukturu a může zlepšit pouze UX, podmíněnost a prezentaci.
+Zdrojová šablona je dodaný dokument `Onboardový formulář klienta`. Obsah zachovává jeho věcnou strukturu a UX ji rozšiřuje o interaktivní průchod.
 
-- [x] **CANDIDATE** Dotazník má 9 sekcí: osobní údaje, zdravotní anamnéza, cíle a motivace, zdatnost a historie, čas a dny, vybavení, strava a doplňky, doplňující informace, souhlasy.
-- [x] **CANDIDATE** Obsahuje věk, výšku a váhu.
-- [x] **CANDIDATE** Zachovává zdravotní otázky, sportovní historii, tělesné parametry, dostupnost, vybavení, stravovací návyky a souhlasy z dodané šablony.
-- [x] **CANDIDATE** Předěláno na interaktivní průvodce po 9 krocích místo jednoho dlouhého formuláře.
-- [x] **CANDIDATE** Progress indikátor, navigace mezi sekcemi a validace povinných odpovědí po kroku.
-- [x] **CANDIDATE** Mobilní zobrazení dostupnosti den x část dne je responzivní.
-- [x] **CANDIDATE** Single choice, boolean a multi choice odpovědi mají přehlednější card/pill UI.
-- [x] **CANDIDATE** Odeslaný dotazník je neměnný snapshot.
-- [x] **CANDIDATE** Hotový dotazník je v klientské zóně zelený.
-- [x] **CANDIDATE** Hotový dotazník lze zobrazit, ne přímo přepsat.
-- [x] **CANDIDATE** CTA `Vyplnit znovu` vytvoří novou verzi a stará zůstane uložená.
-- [x] **CANDIDATE** Administrace umí načíst historii verzí dotazníku.
-- [x] **CANDIDATE** Jana může v administraci přepínat mezi verzemi.
-- [x] **CANDIDATE** Přidané CTA `Stáhnout dotazník JSON`.
-- [x] **CANDIDATE** Přidané CTA `Stáhnout dotazník Word` jako Word-kompatibilní `.doc` export s UTF-8.
-- [ ] **TODO** Pokud má být export skutečný `.docx` soubor podle přesného vizuálu původní šablony, doplnit serverový generátor DOCX. Současný export je Word-kompatibilní `.doc`, nikoli nativní `.docx`.
-- [ ] **TODO** Dotáhnout modulární dotazník `common + online + personal`, aby uživatel při změně služby neopakoval známé údaje.
+- [x] **MAIN** 9 sekcí: osobní údaje, zdravotní anamnéza, cíle a motivace, zdatnost a historie, čas a dny, vybavení, strava a doplňky, doplňující informace, souhlasy.
+- [x] **MAIN** Věk, výška a váha jsou součástí profilu a dotazníku.
+- [x] **MAIN** Zachované zdravotní otázky, sportovní historie, tělesné parametry, dostupnost, vybavení, stravovací návyky a souhlasy.
+- [x] **MAIN** Dotazník je interaktivní průvodce po sekcích místo jedné dlouhé stránky.
+- [x] **MAIN** Progress indikátor a validace povinných odpovědí.
+- [x] **MAIN** Podmíněné otázky podle předchozích odpovědí.
+- [x] **MAIN** Dostupnost den x část dne je responzivní.
+- [x] **MAIN** Odeslaný dotazník je neměnný snapshot.
+- [x] **MAIN** Hotový dotazník je v klientské zóně zelený.
+- [x] **MAIN** Klient může dotazník zobrazit a použít CTA `Vyplnit znovu`.
+- [x] **MAIN** Nové vyplnění vytvoří další verzi a starší verze zůstávají uložené.
+- [x] **MAIN** Jana v administraci vidí historii verzí.
+- [x] **MAIN** Jana má CTA pro stažení dotazníku jako JSON a Word kompatibilní dokument.
+- [ ] **TODO** Pokud má být export nativní `.docx` podle přesného vizuálu původní šablony, doplnit serverový DOCX generátor.
+- [ ] **TODO** Dotáhnout modulární model `common + online + personal`, aby se známé údaje neopakovaly při změně služby.
 
 ## 2. Stav po odeslání dotazníku
 
-- [x] **CANDIDATE** Samotné odeslání dotazníku automaticky nezakládá free trial.
-- [x] **CANDIDATE** Po odeslání následuje motivační success stav, ne mrtvý návrat na dashboard.
-- [x] **CANDIDATE** Uživatel bez produktu dostane volbu Online coaching / Osobní trénink.
-- [x] **CANDIDATE** Online větev nabízí 7 dní zdarma nebo placený měsíční balíček.
-- [x] **CANDIDATE** Pokud uživatel už zaplatil, success stav ho znovu nenutí nakupovat a sdělí, že Jana má podklady pro přípravu plánu.
-- [ ] **TODO** Finální vizuální kontrola success flow po skutečném Next buildu.
+- [x] **MAIN** Odeslání dotazníku samo o sobě nezakládá free trial.
+- [x] **MAIN** Po odeslání následuje motivační stav `Je to tam! První krok máte za sebou.`
+- [x] **MAIN** Pokud uživatel nemá službu, vybírá Online coaching nebo Osobní trénink.
+- [x] **MAIN** Online větev nabízí 7 dní zdarma nebo placený online balíček.
+- [x] **MAIN** Pokud už uživatel zaplatil, success stav ho znovu nenutí kupovat a informuje o přípravě plánu.
+- [ ] **DEPLOY** Ověřit celý success flow v produkčním buildu a na telefonu.
 
 ## 3. Autentizace a účet
 
-- [x] **CANDIDATE** Registrace a přihlášení.
-- [x] **CANDIDATE** Minimální délka hesla je 5 znaků ve frontendu i PHP validaci.
-- [x] **CANDIDATE** `Zapomenuté heslo` a password recovery jsou přítomné.
-- [x] **CANDIDATE** Reset používá jednorázový token s omezenou platností.
-- [x] **CANDIDATE** V klientské zóně je logo odkazující na hlavní web a vedle něj text `Uživatelský účet`.
-- [x] **CANDIDATE** Mobilní navigace účtu je kompaktnější.
-- [ ] **TODO** Ověření e-mailu po registraci.
+- [x] **MAIN** Registrace a přihlášení.
+- [x] **MAIN** Minimální délka hesla je 5 znaků ve frontendu i PHP validaci.
+- [x] **MAIN** `Zapomněli jste heslo?` a password recovery flow.
+- [x] **MAIN** Reset používá jednorázový token s omezenou platností.
+- [x] **MAIN** V klientské zóně logo odkazuje na hlavní web a vedle je text `Uživatelský účet`.
+- [x] **MAIN** Mobilní navigace účtu je kompaktnější.
+- [ ] **TODO** Ověření e-mailové adresy po registraci.
 - [ ] **TODO** Změna hesla z přihlášeného účtu.
-- [ ] **TODO** Otestovat recovery e-mail na skutečném SMTP.
+- [ ] **DEPLOY** Otestovat recovery e-mail přes skutečné SMTP.
 
-## 4. Veřejný web a CTA
+## 4. Uživatelský funnel a veřejné CTA
 
-- [x] **CANDIDATE** Nefunkční `Zobrazit ceník` je odstraněné.
-- [x] **CANDIDATE** `Plán na míru / Průběžná podpora / Bez dojíždění` je až pod online ceníkem.
-- [x] **CANDIDATE** Header CTA `Vybrat balíček` vede na `/online-coaching/#cenik`.
-- [x] **CANDIDATE** CTA na kartách balíčků vedou na platební podstránku s vybraným balíčkem.
-- [x] **CANDIDATE** Hlavní mobilní CTA byla zmenšena a nemají zbytečně zabírat celý viewport.
-- [x] **CANDIDATE** Kontaktní formulář má kompaktnější mobilní submit tlačítko.
-- [x] **CANDIDATE** Zdrojový sweep odstranil znak em dash z aplikačního kódu a veřejných textů. Interní `AGENTS.md` se tímto pravidlem neřídí.
-- [ ] **TODO** Po build/importu zkontrolovat všechny CTA v reálném mobilním viewportu a na fyzickém telefonu.
+- [x] **MAIN** Globální CTA už nepředpokládá online coaching.
+- [x] **MAIN** Neutrální rozcestník `/spoluprace/` nabízí Online coaching a Osobní trénink.
+- [x] **MAIN** Konkrétní produktové CTA mohou jít přímo na checkout daného produktu.
+- [x] **MAIN** Nefunkční `Zobrazit ceník` je odstraněné.
+- [x] **MAIN** `Plán na míru / Průběžná podpora / Bez dojíždění` je pod online ceníkem.
+- [x] **MAIN** Mobilní hlavní CTA jsou kompaktnější a nemají bezdůvodně zabírat celý viewport.
+- [x] **MAIN** Veřejné texty a aplikační zdroj nepoužívají zakázaný em dash znak.
+- [ ] **DEPLOY** Ověřit všechny CTA v reálném mobilním viewportu a na fyzickém telefonu.
 
-## 5. Reference a příběhy
+## 5. Reference
 
-- [x] **CANDIDATE** Text `Reference se sbírají` byl nahrazen příběhovými kartami se jmény bez fotek.
-- [x] **CANDIDATE** Použité příběhy jsou transparentně označené jako ukázkové příběhy, ne jako tvrzené skutečné klientské reference.
-- [ ] **TODO** Až budou skutečné reference, nahradit ukázkové příběhy odsouhlasenými citacemi a případně fotkami.
+- [x] **MAIN** Původní stav `Reference se sbírají` je nahrazený příběhovými kartami se jmény a bez fotek.
+- [ ] **TODO** Až budou skutečné reference, nahradit současné ukázkové příběhy odsouhlasenými citacemi a případně fotkami.
 
 ## 6. Kontakt a zprávy
 
-- [x] **CANDIDATE** Kontaktní e-mail je `jana@janafitnessrada.cz`.
-- [x] **CANDIDATE** Telefon je `+420 774 641 541`.
-- [x] **CANDIDATE** `Napište Janě` zobrazuje kontakt a backendová notifikace směřuje na Janin e-mail.
-- [x] **CANDIDATE** Nepřečtené zprávy klienta/Jany jsou oranžově zvýrazněné.
-- [x] **CANDIDATE** Po otevření se pracuje se stavem přečtení.
-- [ ] **TODO** Ověřit na produkci skutečné doručení kontaktního formuláře a zpráv přes SMTP/outbox.
+- [x] **MAIN** Kontaktní e-mail je `jana@janafitnessrada.cz`.
+- [x] **MAIN** Telefon je `+420 774 641 541`.
+- [x] **MAIN** `Napište Janě` zobrazuje Janin e-mail a telefon.
+- [x] **MAIN** Backendová notifikace z kontaktního formuláře směřuje na Janin e-mail.
+- [x] **MAIN** Nepřečtené zprávy klienta a Jany jsou oranžově zvýrazněné.
+- [x] **MAIN** Systém pracuje se stavem přečtení.
+- [ ] **DEPLOY** Ověřit skutečné doručování zpráv a kontaktního formuláře přes SMTP/outbox.
 
 ## 7. Online coaching
 
-- [x] **CANDIDATE** Účet, onboarding, produkt a čerpání jsou oddělené koncepty.
-- [x] **CANDIDATE** Free trial se nespouští registrací ani samotným odesláním dotazníku.
-- [x] **CANDIDATE** Uživatel musí explicitně zvolit 7 dní zdarma.
-- [x] **CANDIDATE** 7 dní začne až publikací plánu Janou.
-- [x] **CANDIDATE** Placený balíček lze koupit před dotazníkem.
-- [x] **CANDIDATE** Placené období začne až publikací plánu, ne platbou.
-- [x] **CANDIDATE** Dashboard rozlišuje čekání na dotazník, čekání na plán, aktivní a ukončené období.
+- [x] **MAIN** Účet, onboarding, produkt a čerpání jsou oddělené koncepty.
+- [x] **MAIN** Free trial se nespouští registrací ani samotným odesláním dotazníku.
+- [x] **MAIN** Uživatel musí explicitně zvolit 7 dní zdarma.
+- [x] **MAIN** 7 dní začne až publikací plánu Janou.
+- [x] **MAIN** Placený online balíček lze koupit před dotazníkem.
+- [x] **MAIN** Placené období začne až publikací plánu, ne okamžikem platby.
+- [x] **MAIN** Dashboard rozlišuje čekání na dotazník, čekání na plán, aktivní a ukončené období.
 - [ ] **TODO** Připomínka klientovi před koncem období.
 - [ ] **TODO** Recurring Stripe subscription není připravené. První verze zůstává jednorázová měsíční platba.
 
-## 8. AI plán a administrace Jany
+## 8. AI plán a workflow Jany
 
-- [x] **CANDIDATE** Plan Schema v2 je flexibilní a nevyžaduje katalog cviků.
-- [x] **CANDIDATE** AI rozhoduje o konkrétním tréninkovém obsahu. Schema určuje strukturu pro validaci a renderer.
-- [x] **CANDIDATE** Jana vidí dotazník klienta.
-- [x] **CANDIDATE** Jana může připravit/kopírovat AI prompt.
-- [x] **CANDIDATE** Jana může vložit nebo nahrát JSON plánu.
-- [x] **CANDIDATE** Server JSON validuje a vrací konkrétní cestu chyby.
-- [x] **CANDIDATE** Jana vidí náhled stejným rendererem jako klient.
-- [x] **CANDIDATE** Publikace plánu aktivuje příslušné období.
-- [x] **CANDIDATE** Zdravotní odpovědi mohou vynutit ruční kontrolu.
-- [ ] **TODO** Otestovat několik reálných AI plánů různých typů před produkcí.
+- [x] **MAIN** Plan Schema v2 je flexibilní a nevyžaduje katalog cviků.
+- [x] **MAIN** AI rozhoduje o konkrétním tréninkovém obsahu. Schema určuje strukturu pro validaci a renderer.
+- [x] **MAIN** Jana vidí dotazník klienta.
+- [x] **MAIN** Jana může připravit a kopírovat AI prompt.
+- [x] **MAIN** Jana může vložit nebo nahrát JSON plánu.
+- [x] **MAIN** Server JSON validuje a vrací konkrétní cestu chyby.
+- [x] **MAIN** Jana vidí náhled stejným rendererem jako klient.
+- [x] **MAIN** Publikace plánu aktivuje příslušné období.
+- [x] **MAIN** Zdravotní odpovědi mohou vynutit ruční kontrolu.
+- [ ] **TODO** Otestovat více reálných AI plánů různých typů a edge cases.
 
-## 9. Payment page
+## 9. Administrace
 
-Aktuální směr je samostatná platební podstránka, nikoli okamžitý Stripe API call z tlačítka balíčku.
+- [x] **MAIN** Admin je koncipovaný jako pracovní fronta Jany, ne pouze tabulka klientů.
+- [x] **MAIN** Stavové karty pro čekání na dotazník, čekání na plán, nové zprávy, aktivní klienty, končící spolupráce a nové platby.
+- [x] **MAIN** Oranžová je stav vyžadující pozornost, zelená značí hotovo nebo aktivní stav.
+- [x] **MAIN** Detail klienta zobrazuje jméno, e-mail, telefon, věk, výšku, váhu, službu a stav.
+- [x] **MAIN** Rychlé akce pro dotazník, JSON, Word a komunikaci.
+- [x] **MAIN** Připravená konzistentní Lucide ikonografie a jemný fitness line-art pattern.
+- [ ] **TODO** Dále sjednotit detail klienta do jasných záložek Přehled, Dotazníky, Plány, Platby, Zprávy a Historie.
+- [ ] **TODO** Doplnit plnohodnotnou historii objednávek, check-inů a zpráv přímo do detailu klienta.
+- [ ] **TODO** Dolaďit admin mobile layout po reálném buildu.
 
-- [x] **CANDIDATE** Existuje samostatná `/app/platba/` podstránka.
-- [x] **CANDIDATE** Zobrazuje rekapitulaci balíčku a cenu.
-- [x] **CANDIDATE** Obsahuje volbu Stripe a QR platba.
-- [x] **CANDIDATE** QR je zatím placeholder.
-- [x] **CANDIDATE** Platby jsou v development režimu a stránka místo technického erroru vysvětluje, že web je ve vývoji a pro nákup má uživatel kontaktovat Janu.
-- [x] **CANDIDATE** Na payment page je Janin e-mail a telefon.
+## 10. Payment page
+
+Aktuální směr je samostatná platební podstránka, ne okamžitý Stripe API call z karty produktu.
+
+- [x] **MAIN** Existuje samostatná `/app/platba/` podstránka.
+- [x] **MAIN** Zobrazuje rekapitulaci balíčku a cenu.
+- [x] **MAIN** Obsahuje volbu Stripe a QR platba.
+- [x] **MAIN** QR je zatím placeholder.
+- [x] **MAIN** Platby jsou v development režimu. Místo technického erroru uživatel vidí informaci, že web je ve vývoji a pro nákup má kontaktovat Janu.
+- [x] **MAIN** Na payment page je Janin e-mail a telefon.
 - [ ] **TODO NEXT** Udělat kompletní UX review payment page.
 - [ ] **TODO NEXT** Doplnit finální fakturační údaje Jany, IČO a adresu.
 - [ ] **TODO NEXT** Doplnit bankovní účet a skutečná data pro QR kód.
-- [ ] **TODO NEXT** Nakonfigurovat Stripe secret + webhook secret mimo repozitář.
+- [ ] **TODO NEXT** Nakonfigurovat Stripe secret a webhook secret mimo repozitář.
 - [ ] **TODO NEXT** Otestovat payment success, cancel, webhook a idempotenci.
 - [ ] **TODO NEXT** Teprve potom zapnout skutečné platby.
 
-## 10. Osobní trenérství
+## 11. Osobní trenérství
 
-- [x] **ROZHODNUTO** Osobní trenérství je samostatná produktová větev.
-- [x] **ROZHODNUTO** Má evidovat počet lekcí, ne kopírovat online period lifecycle.
+- [x] **MAIN / ROZHODNUTO** Osobní trenérství je samostatná produktová větev.
+- [x] **MAIN / ROZHODNUTO** Nemá kopírovat online period lifecycle.
 - [ ] **TODO** Datový model `sessions_total / sessions_used / sessions_remaining`.
 - [ ] **TODO** Nákup osobního balíčku.
-- [ ] **TODO** Rezervace/termíny a evidence čerpání.
-- [ ] **TODO** Samostatná personal část dotazníku navázaná na common profil.
+- [ ] **TODO** Rezervace termínů a evidence čerpání.
+- [ ] **TODO** Samostatná personal část dotazníku navázaná na společný profil.
 
-## 11. E-mailový systém
+## 12. E-mailový systém
 
-- [x] **CANDIDATE** Existuje `email_outbox` základ a worker.
-- [x] **CANDIDATE** Události jsou připravené pro dotazník, platbu, novou zprávu, publikaci plánu a password recovery.
-- [ ] **TODO** Přepnout/ověřit ostré SMTP.
+- [x] **MAIN** Existuje `email_outbox` základ a worker.
+- [x] **MAIN** Události jsou připravené pro dotazník, platbu, novou zprávu, publikaci plánu a password recovery.
+- [ ] **TODO** Přepnout a ověřit ostré SMTP.
 - [ ] **TODO** Nastavit cron na Active24.
 - [ ] **TODO** Retry strategie a monitoring chyb.
+- [ ] **TODO** Klientský potvrzovací e-mail po přijetí dotazníku.
 - [ ] **TODO** E-mail před koncem plánu.
+- [ ] **TODO** Registrace a e-mail verification flow.
 
-## 12. Kvalita, UTF-8 a build
+## 13. Kvalita a build
 
-- [x] **CANDIDATE** PHP syntaxe po posledním review prochází.
-- [x] **CANDIDATE** 51 TS/TSX souborů prošlo lokální syntax/import kontrolou.
-- [x] **CANDIDATE** UTF-8 kontrola prošla na 104 souborech.
-- [x] **CANDIDATE** V aplikačních textech nebyly po review nalezené staré BagiraSys kontakty ani mojibake vzory.
-- [ ] **TODO P1** Full `npm install` a `next build` nebyly v tomto prostředí ověřené.
-- [ ] **TODO P1** Po importu do GitHubu přidat GitHub Actions: install, typecheck, lint, source validation, Next build.
-- [ ] **TODO P1** Build artifact musí být navázaný na konkrétní commit SHA.
+- [x] **MAIN** Zdrojová kontrola PHP syntaxe prošla při importu.
+- [x] **MAIN** TS/TSX source a import kontrola prošla na aktuálním kandidátu před importem.
+- [x] **MAIN** UTF-8 kontrola a kontrola mojibake jsou součástí projektu.
+- [x] **MAIN** Optimalizované veřejné WebP obrázky a favicon jsou v repozitáři.
+- [x] **MAIN** V repozitáři nejsou produkční Stripe/OpenAI secrets z dosavadního secret scanu.
+- [ ] **TODO** Spustit plný `npm install`, typecheck, lint a Next build z čistého checkoutu.
+- [ ] **DEPLOY** Otestovat výsledný statický export na Active24.
 
-## 13. Pořadí dalších kroků
+## Nejbližší pořadí práce
 
-### P0 - jediný zdroj pravdy
-
-1. Importovat aktuální migrační kandidát do `JanaFitness/main`, včetně assetů.
-2. Porovnat počet souborů a zkontrolovat, že nic chybí.
-3. Od tohoto okamžiku už neupravovat staré ZIPy.
-
-### P1 - automatická kontrola a build
-
-1. GitHub Actions pro validaci a Next build.
-2. Build ZIP pojmenovaný podle krátkého SHA.
-3. Žádný deploy z necommitnuté lokální kopie.
-
-### P2 - nasazení
-
-1. Nahrát ZIP z konkrétního SHA na Active24.
-2. Rozbalit frontend + PHP API.
-3. Aplikovat odpovídající DB migrace.
-4. Smoke test: registrace, login, recovery, dotazník, admin, zprávy, checkout page, kontakt.
-5. Zapsat skutečný SHA do `DEPLOYED_VERSION`.
-
-### P3 - payment page
-
-Po stabilizaci P0 až P2 dokončit platební stránku, QR, Stripe konfiguraci a payment lifecycle.
-
-## Definice hotovo
-
-Funkce je `hotová` až když:
-
-1. je v `JanaFitness/main`,
-2. prošla automatickými kontrolami,
-3. je součástí buildu z konkrétního SHA,
-4. pokud má být v produkci, je tento SHA skutečně nasazený,
-5. `DEPLOYED_VERSION` odpovídá nasazenému SHA.
-
-Do té doby používáme označení CANDIDATE nebo TODO. Tím se vyhneme situaci, kdy je něco opravené v jednom ZIPu, ale nikoli na webu.
+1. Payment page UX pass.
+2. Admin detail klienta a timeline.
+3. SMTP a e-mailové notifikace.
+4. Osobní trenérství lifecycle.
+5. Produkční build a Active24 deploy.
+6. Po ověření produkce aktualizovat `DEPLOYED_VERSION`.
