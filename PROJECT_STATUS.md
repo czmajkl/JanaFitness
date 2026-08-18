@@ -143,12 +143,20 @@ Aktuální směr je samostatná platební podstránka, ne okamžitý Stripe API 
 
 ## 11. Osobní trenérství
 
-- [x] **MAIN / ROZHODNUTO** Osobní trenérství je samostatná produktová větev.
-- [x] **MAIN / ROZHODNUTO** Nemá kopírovat online period lifecycle.
-- [ ] **TODO** Datový model `sessions_total / sessions_used / sessions_remaining`.
-- [ ] **TODO** Nákup osobního balíčku.
-- [ ] **TODO** Rezervace termínů a evidence čerpání.
-- [ ] **TODO** Samostatná personal část dotazníku navázaná na společný profil.
+Rozhodnutí pro první produkční verzi: osobní trénink zůstává záměrně jednoduchý a osobní. Web řeší výběr a nákup produktu, další domluvu řeší Jana přímo s klientem.
+
+- [x] **ROZHODNUTO** Osobní trenérství je samostatná produktová větev.
+- [x] **ROZHODNUTO** Osobní produkty mohou být jednorázová lekce, balíček 5 lekcí a balíček 10 lekcí.
+- [x] **ROZHODNUTO** Nebudujeme nyní rezervační kalendář ani automatickou evidenci vyčerpaných lekcí.
+- [x] **ROZHODNUTO** Nebudujeme nyní `sessions_total / sessions_used / sessions_remaining`.
+- [x] **ROZHODNUTO** Po nákupu klient dostane potvrzení, že Jana se ozve a osobně domluví termín a další postup.
+- [x] **ROZHODNUTO** Jana dostane po objednávce informaci o klientovi, produktu, kontaktu a platbě s odkazem do administrace.
+- [x] **ROZHODNUTO** Administrace potřebuje pouze jednoduchý stav osobní objednávky, například `Nová` a `Vyřízená`.
+- [ ] **TODO NEXT** Napojit osobní produktové CTA na jednotnou payment page.
+- [ ] **TODO NEXT** Po úspěšné osobní platbě zobrazit správnou success stránku s informací, že Jana klienta kontaktuje.
+- [ ] **TODO NEXT** Odeslat Janě notifikaci o nové osobní objednávce.
+- [ ] **TODO NEXT** Zobrazit osobní objednávku v klientské zóně a administraci.
+- [ ] **TODO** Rozhodnout, které údaje z obecného vstupního dotazníku mají být pro osobní trénink povinné před první lekcí. Nákup samotný tím není blokovaný.
 
 ## 12. E-mailový systém
 
@@ -173,9 +181,9 @@ Aktuální směr je samostatná platební podstránka, ne okamžitý Stripe API 
 
 ## Nejbližší pořadí práce
 
-1. Payment page UX pass.
-2. Admin detail klienta a timeline.
-3. SMTP a e-mailové notifikace.
-4. Osobní trenérství lifecycle.
+1. Payment page UX pass a společný checkout pro online i osobní produkty.
+2. Osobní nákup: success stav, notifikace Janě a jednoduché zobrazení objednávky.
+3. Admin detail klienta a timeline.
+4. SMTP a e-mailové notifikace.
 5. Produkční build a Active24 deploy.
 6. Po ověření produkce aktualizovat `DEPLOYED_VERSION`.
