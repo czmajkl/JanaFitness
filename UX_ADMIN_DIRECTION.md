@@ -4,24 +4,38 @@ Aktualizováno: 2026-08-18
 
 Tento dokument řeší dvě věci: uživatelskou cestu k výběru služby a vizuální směr administrace.
 
+## Stav implementace
+
+- [x] Implementováno v aktuálním migračním kandidátu: neutrální `/spoluprace/` rozcestník.
+- [x] Implementováno v kandidátu: globální CTA `Začít` vede na rozcestník, ne přímo na online coaching.
+- [x] Implementováno v kandidátu: admin hero s jemným fitness patternem.
+- [x] Implementováno v kandidátu: stavové karty, fronta pozornosti, hledání klienta a oranžové priority.
+- [x] Implementováno v kandidátu: profilový header klienta s telefonem, věkem, výškou, váhou, balíčkem, platností a poslední platbou.
+- [x] Implementováno v kandidátu: rychlé akce Dotazník, JSON, Word a Napsat klientovi.
+- [x] Implementováno v kandidátu: Lucide ikony a lokální fitness pattern v `public/design-assets/`.
+- [x] Zdrojová validace kandidáta: PHP syntax, TS/TSX syntax a lokální importy, UTF-8 a JSON.
+- [ ] Kompletní aplikační kód musí být stále jednorázově importován do GitHub `main`. Kořen repozitáře zatím není kompletní buildovatelný projekt.
+- [ ] Po importu spustit skutečný Next build a vizuální kontrolu na desktopu i telefonu.
+
 ## 1. Hlavní CTA nesmí předpokládat online coaching
 
 Problém:
 
-Aktuální text typu `Vybrat balíček` posílá uživatele přímo na online coaching. To je špatně, protože web nabízí dvě odlišné služby: online coaching a osobní trénink.
+Text typu `Vybrat balíček` nesmí uživatele automaticky posílat přímo na online coaching. Web nabízí dvě odlišné služby: online coaching a osobní trénink.
 
-Navržená oprava:
+Oprava:
 
-- hlavní CTA na veřejném webu změnit na `Začít` nebo `Vybrat způsob spolupráce`
+- hlavní CTA na veřejném webu je `Začít`
 - CTA vede na neutrální rozcestník `/spoluprace/`
 - rozcestník obsahuje dvě hlavní karty:
   - `Online coaching`
   - `Osobní trénink`
 - až po výběru služby se zobrazí konkrétní produkty
+- pokud je uživatel už v kontextu konkrétní služby, například na detailu online coachingu, konkrétní produktové CTA může jít přímo k danému produktu
 
 ### Doporučený flow
 
-`Homepage -> Vybrat způsob spolupráce -> Online / Osobně -> konkrétní nabídka -> účet / nákup / onboarding`
+`Homepage -> Začít -> Online / Osobně -> konkrétní nabídka -> účet / nákup / onboarding`
 
 ### Online větev
 
@@ -37,17 +51,15 @@ Osobní balíčky se nesmí míchat s online platností plánu. Čerpají počet
 
 ## 2. Rozcestník spolupráce
 
-Doporučený vizuální návrh:
-
 ### Online coaching
 
-Ikona: notebook / dumbbell / heart pulse
+Ikona: dumbbell / heart pulse
 
 Text:
 
 `Tréninkový plán na míru, podpora a možnost začít 7 dní zdarma.`
 
-CTA: `Chci cvičit online`
+CTA: `Chci online coaching`
 
 ### Osobní trénink
 
@@ -57,7 +69,7 @@ Text:
 
 `Osobní vedení s Janou, technika, motivace a společný trénink.`
 
-CTA: `Chci cvičit osobně`
+CTA: `Chci osobní trénink`
 
 Na mobilu karty pod sebou. Na desktopu vedle sebe.
 
@@ -69,14 +81,14 @@ Jana má během několika sekund poznat, co vyžaduje její pozornost.
 
 ### Horní přehled
 
-Použít 4 až 6 stavových karet:
+Použít stavové karty:
 
 - `Čeká na dotazník`
 - `Čeká na plán`
 - `Nové zprávy`
 - `Aktivní klienti`
-- `Končí brzy`
-- `Nové objednávky`
+- `Končí do 7 dní`
+- `Nové platby`
 
 Každá karta má:
 
@@ -84,7 +96,16 @@ Každá karta má:
 - velké číslo
 - krátký popis
 - jasnou barvu stavu
-- klik na filtrovaný seznam
+
+### Fronta pozornosti
+
+Pod statistikami je prioritní fronta klientů. Řazení zvýhodňuje:
+
+1. nepřečtené zprávy
+2. klienty čekající na plán
+3. zaplacené klienty čekající na dotazník
+4. aktivní spolupráce končící do 7 dní
+5. nové platby
 
 ### Barvy stavů
 
@@ -96,7 +117,7 @@ Každá karta má:
 
 ## 4. Detail klienta
 
-Detail klienta má mít nahoře kompaktní profilový header:
+Detail klienta má nahoře kompaktní profilový header:
 
 - jméno
 - e-mail
@@ -106,40 +127,39 @@ Detail klienta má mít nahoře kompaktní profilový header:
 - váha
 - aktivní služba
 - stav spolupráce
+- začátek a konec balíčku
+- poslední platba
 
-Pod tím rychlé akce:
+Rychlé akce:
 
-- `Zobrazit dotazník`
-- `Stáhnout JSON`
-- `Stáhnout Word`
-- `Připravit AI prompt`
-- `Nahrát plán`
+- `Dotazník`
+- `JSON`
+- `Word`
 - `Napsat klientovi`
 
-Další obsah rozdělit do záložek nebo sekcí:
+Navazující sekce zachovávají workflow:
 
-1. Přehled
-2. Dotazníky
-3. Plány
-4. Platby
-5. Zprávy
-6. Historie
+- dotazník a historie verzí
+- AI prompt
+- import a validace JSONu
+- náhled plánu
+- publikace
 
 ## 5. Vizuální fitness motiv
 
-Administrace má zůstat pracovní nástroj. Fitness motiv má být jemný, ne dominantní.
+Administrace zůstává pracovní nástroj. Fitness motiv je jemný, ne dominantní.
 
-Doporučení:
+Použito:
 
 - line art ikony
-- velmi slabý pattern činek, pulsu a pohybu v prázdných plochách
-- opacity přibližně 3 až 7 procent
-- pattern použít jen v hero/header plochách, ne pod tabulkami a formuláři
-- žádné velké stock fotografie za textem
+- slabý pattern činek, pulsu a pohybu v hero části
+- nízká opacity
+- pattern není pod formuláři ani dlouhými datovými bloky
+- žádná velká stock fotografie za textem
 
 ## 6. Ikonografie
 
-Použít jednu konzistentní rodinu ikon. Vybraný směr: Lucide.
+Používá se jedna konzistentní rodina ikon: Lucide.
 
 Mapování:
 
@@ -151,28 +171,24 @@ Mapování:
 - platby: `credit-card`
 - termíny: `calendar-days`
 
-SVG zdroje jsou uložené v `design-assets/icons/`.
+Zdrojové SVG a licence jsou uložené v `design-assets/`. Pro runtime kandidát obsahuje stejné assety v `public/design-assets/`.
 
 ## 7. Mobile admin
 
 Na telefonu:
 
-- horní stavové karty scrollují horizontálně nebo se skládají po dvou
-- hlavní CTA nesmí zabrat celý viewport
-- tabulky převést na karty nebo umožnit horizontální scroll pouze tam, kde je nutný
-- sticky spodní akce jen pro jednu hlavní činnost
-- detail klienta musí prioritizovat stav, zprávy a rychlé akce
+- stavové karty se skládají do dvou sloupců
+- hlavní CTA jsou kompaktní
+- seznam klientů funguje jako karty
+- vyhledávání klienta je nad seznamem
+- detail klienta prioritizuje stav, zprávy a rychlé akce
+- dlouhé workflow části zůstávají vertikální a čitelné
 
-## 8. Implementační pořadí
+## 8. Další pořadí
 
-1. Neutrální rozcestník `/spoluprace/`
-2. Změnit globální CTA z přímého online odkazu na rozcestník
-3. Admin dashboard se stavovými kartami
-4. Detail klienta s rychlými akcemi a záložkami
-5. Nasadit ikony a jemný fitness pattern
-6. Mobilní pass
-7. Až potom dolaďovat animace a dekorace
-
-## Poznámka k repozitáři
-
-Samotná aplikace zatím stále není kompletně importovaná do GitHub `main`. Tento dokument je implementační specifikace. Po prvním importu se změny mají dělat přímo proti zdrojovému kódu v repozitáři.
+1. Jednorázově dostat celý aktuální kandidát do GitHub `main`
+2. Spustit skutečný Next build
+3. Udělat mobilní a desktop vizuální QA rozcestníku a adminu
+4. Payment page UX pass
+5. Osobní trénink lifecycle a čerpání lekcí
+6. Až potom dolaďovat animace a dekorace
