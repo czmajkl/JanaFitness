@@ -1,4 +1,4 @@
-name: Build Active24 deploy artifact
+name: Prepare local build dependencies
 
 on:
   pull_request:
@@ -10,34 +10,21 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  dependencies:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout build branch
         uses: actions/checkout@v4
 
-      - name: Reconstruct text source archive
+      - name: Reconstruct source for package metadata
         shell: bash
         run: |
           set -euo pipefail
           cat .text-source/chunk*.b64 | base64 --decode > /tmp/janafitness-text-source.tar.xz
           echo "12f7342d1e883ecff324a88142648076a07ce5569723f5db282516d584ece529  /tmp/janafitness-text-source.tar.xz" | sha256sum -c -
-          xz -t /tmp/janafitness-text-source.tar.xz
-
-      - name: Extract and patch release source
-        shell: bash
-        run: |
-          set -euo pipefail
           mkdir release-source
           tar -xJf /tmp/janafitness-text-source.tar.xz -C release-source
           test -f release-source/package.json
-          test -f release-source/next.config.ts
-          test -f release-source/scripts/prepare-deploy.mjs
-          test -f release-source/php-api/checkout/create.php
-          test -f 'release-source/src/app/(frontend)/(client)/app/platba/page.tsx'
-          sed -i 's/{user.role === "admin"/{value.user.role === "admin"/g' release-source/src/components/client/AuthProvider.tsx
-          sed -i 's/"publishedAt": "2026-08-00"/"publishedAt": "2026-08-01"/g' release-source/src/content/posts.json
-          node -e "const p=require('./release-source/package.json'); console.log('release package version:', p.version)"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -48,42 +35,14 @@ jobs:
         working-directory: release-source
         run: npm install --no-audit --no-fund
 
-      - name: Validate source
-        working-directory: release-source
-        run: npm run validate:source
-
-      - name: Typecheck
-        working-directory: release-source
-        run: npm run typecheck
-
-      - name: Lint advisory
-        working-directory: release-source
-        continue-on-error: true
-        run: npm run lint
-
-      - name: Build static site
-        working-directory: release-source
-        run: npm run build
-
-      - name: Prepare Active24 deploy tree
-        working-directory: release-source
-        run: npm run deploy:prepare
-
-      - name: Package webroot
+      - name: Package dependencies
         shell: bash
-        run: |
-          set -euo pipefail
-          cd release-source/deploy/web
-          zip -r "$GITHUB_WORKSPACE/janafitness-v0.7.0-active24-web-textonly.zip" .
-          cd "$GITHUB_WORKSPACE"
-          sha256sum janafitness-v0.7.0-active24-web-textonly.zip > janafitness-v0.7.0-active24-web-textonly.zip.sha256
+        run: tar -czf janafitness-node-modules-v070.tgz -C release-source node_modules package-lock.json
 
-      - name: Upload deploy artifact
+      - name: Upload dependencies
         uses: actions/upload-artifact@v4
         with:
-          name: janafitness-v0.7.0-active24-web-textonly
-          path: |
-            janafitness-v0.7.0-active24-web-textonly.zip
-            janafitness-v0.7.0-active24-web-textonly.zip.sha256
+          name: janafitness-node-modules-v070
+          path: janafitness-node-modules-v070.tgz
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
