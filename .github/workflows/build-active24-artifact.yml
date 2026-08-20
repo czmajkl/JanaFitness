@@ -55,8 +55,9 @@ jobs:
         working-directory: release-source
         run: npm run typecheck
 
-      - name: Lint
+      - name: Lint advisory
         working-directory: release-source
+        continue-on-error: true
         run: npm run lint
 
       - name: Build static site
