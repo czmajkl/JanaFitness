@@ -25,7 +25,8 @@ jobs:
           set -euo pipefail
           sha256sum .build-input/janafitness-v0.7.0-source.tar.xz
           xz -t .build-input/janafitness-v0.7.0-source.tar.xz
-          tar -tJf .build-input/janafitness-v0.7.0-source.tar.xz | head -80
+          tar -tJf .build-input/janafitness-v0.7.0-source.tar.xz > /tmp/release-files.txt
+          sed -n '1,80p' /tmp/release-files.txt
 
       - name: Extract release source
         shell: bash
