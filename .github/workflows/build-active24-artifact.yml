@@ -23,7 +23,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "52df4e6e7d5c93b35a4f8a247b923aed54782a9d47f5996651cd60a9f00f6051  .build-input/janafitness-v0.7.0-source.tar.xz" | sha256sum -c -
+          sha256sum .build-input/janafitness-v0.7.0-source.tar.xz
+          xz -t .build-input/janafitness-v0.7.0-source.tar.xz
+          tar -tJf .build-input/janafitness-v0.7.0-source.tar.xz | head -80
 
       - name: Extract release source
         shell: bash
@@ -31,6 +33,12 @@ jobs:
           set -euo pipefail
           mkdir release-source
           tar -xJf .build-input/janafitness-v0.7.0-source.tar.xz -C release-source
+          test -f release-source/package.json
+          test -f release-source/next.config.ts
+          test -f release-source/scripts/prepare-deploy.mjs
+          test -f release-source/php-api/checkout/create.php
+          test -f 'release-source/src/app/(frontend)/(client)/app/platba/page.tsx'
+          node -e "const p=require('./release-source/package.json'); console.log('release package version:', p.version)"
 
       - name: Setup Node
         uses: actions/setup-node@v4
