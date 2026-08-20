@@ -1,0 +1,79 @@
+name: Build Active24 deploy artifact
+
+on:
+  push:
+    branches:
+      - build/active24-artifact-20260820
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout build branch
+        uses: actions/checkout@v4
+
+      - name: Verify release source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "52df4e6e7d5c93b35a4f8a247b923aed54782a9d47f5996651cd60a9f00f6051  .build-input/janafitness-v0.7.0-source.tar.xz" | sha256sum -c -
+
+      - name: Extract release source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir release-source
+          tar -xJf .build-input/janafitness-v0.7.0-source.tar.xz -C release-source
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: release-source/package.json
+
+      - name: Install dependencies
+        working-directory: release-source
+        run: npm install --no-audit --no-fund
+
+      - name: Validate source
+        working-directory: release-source
+        run: npm run validate:source
+
+      - name: Typecheck
+        working-directory: release-source
+        run: npm run typecheck
+
+      - name: Lint
+        working-directory: release-source
+        run: npm run lint
+
+      - name: Build static site
+        working-directory: release-source
+        run: npm run build
+
+      - name: Prepare Active24 deploy tree
+        working-directory: release-source
+        run: npm run deploy:prepare
+
+      - name: Package webroot
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd release-source/deploy/web
+          zip -r "$GITHUB_WORKSPACE/janafitness-v0.7.0-active24-web.zip" .
+          cd "$GITHUB_WORKSPACE"
+          sha256sum janafitness-v0.7.0-active24-web.zip > janafitness-v0.7.0-active24-web.zip.sha256
+
+      - name: Upload deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: janafitness-v0.7.0-active24-web
+          path: |
+            janafitness-v0.7.0-active24-web.zip
+            janafitness-v0.7.0-active24-web.zip.sha256
+          if-no-files-found: error
+          retention-days: 7
