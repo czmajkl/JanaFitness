@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - build/active24-artifact-20260820
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read
@@ -32,8 +36,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: release-source/package.json
 
       - name: Install dependencies
         working-directory: release-source
