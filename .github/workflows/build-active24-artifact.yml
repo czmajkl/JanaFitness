@@ -1,9 +1,6 @@
 name: Build Active24 deploy artifact
 
 on:
-  push:
-    branches:
-      - build/active24-artifact-20260820
   pull_request:
     branches:
       - main
@@ -19,13 +16,14 @@ jobs:
       - name: Checkout build branch
         uses: actions/checkout@v4
 
-      - name: Verify release source archive
+      - name: Reconstruct text source archive
         shell: bash
         run: |
           set -euo pipefail
-          sha256sum .build-input/janafitness-v0.7.0-source.tar.xz
-          xz -t .build-input/janafitness-v0.7.0-source.tar.xz
-          tar -tJf .build-input/janafitness-v0.7.0-source.tar.xz > /tmp/release-files.txt
+          cat .text-source/chunk*.b64 | base64 --decode > /tmp/janafitness-text-source.tar.xz
+          echo "12f7342d1e883ecff324a88142648076a07ce5569723f5db282516d584ece529  /tmp/janafitness-text-source.tar.xz" | sha256sum -c -
+          xz -t /tmp/janafitness-text-source.tar.xz
+          tar -tJf /tmp/janafitness-text-source.tar.xz > /tmp/release-files.txt
           sed -n '1,80p' /tmp/release-files.txt
 
       - name: Extract release source
@@ -33,7 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir release-source
-          tar -xJf .build-input/janafitness-v0.7.0-source.tar.xz -C release-source
+          tar -xJf /tmp/janafitness-text-source.tar.xz -C release-source
           test -f release-source/package.json
           test -f release-source/next.config.ts
           test -f release-source/scripts/prepare-deploy.mjs
@@ -75,16 +73,16 @@ jobs:
         run: |
           set -euo pipefail
           cd release-source/deploy/web
-          zip -r "$GITHUB_WORKSPACE/janafitness-v0.7.0-active24-web.zip" .
+          zip -r "$GITHUB_WORKSPACE/janafitness-v0.7.0-active24-web-textonly.zip" .
           cd "$GITHUB_WORKSPACE"
-          sha256sum janafitness-v0.7.0-active24-web.zip > janafitness-v0.7.0-active24-web.zip.sha256
+          sha256sum janafitness-v0.7.0-active24-web-textonly.zip > janafitness-v0.7.0-active24-web-textonly.zip.sha256
 
       - name: Upload deploy artifact
         uses: actions/upload-artifact@v4
         with:
-          name: janafitness-v0.7.0-active24-web
+          name: janafitness-v0.7.0-active24-web-textonly
           path: |
-            janafitness-v0.7.0-active24-web.zip
-            janafitness-v0.7.0-active24-web.zip.sha256
+            janafitness-v0.7.0-active24-web-textonly.zip
+            janafitness-v0.7.0-active24-web-textonly.zip.sha256
           if-no-files-found: error
           retention-days: 7
