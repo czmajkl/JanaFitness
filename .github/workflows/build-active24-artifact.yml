@@ -23,10 +23,8 @@ jobs:
           cat .text-source/chunk*.b64 | base64 --decode > /tmp/janafitness-text-source.tar.xz
           echo "12f7342d1e883ecff324a88142648076a07ce5569723f5db282516d584ece529  /tmp/janafitness-text-source.tar.xz" | sha256sum -c -
           xz -t /tmp/janafitness-text-source.tar.xz
-          tar -tJf /tmp/janafitness-text-source.tar.xz > /tmp/release-files.txt
-          sed -n '1,80p' /tmp/release-files.txt
 
-      - name: Extract release source
+      - name: Extract and patch release source
         shell: bash
         run: |
           set -euo pipefail
@@ -37,6 +35,7 @@ jobs:
           test -f release-source/scripts/prepare-deploy.mjs
           test -f release-source/php-api/checkout/create.php
           test -f 'release-source/src/app/(frontend)/(client)/app/platba/page.tsx'
+          sed -i 's/{user.role === "admin"/{value.user.role === "admin"/g' release-source/src/components/client/AuthProvider.tsx
           node -e "const p=require('./release-source/package.json'); console.log('release package version:', p.version)"
 
       - name: Setup Node
