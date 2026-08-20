@@ -36,6 +36,7 @@ jobs:
           test -f release-source/php-api/checkout/create.php
           test -f 'release-source/src/app/(frontend)/(client)/app/platba/page.tsx'
           sed -i 's/{user.role === "admin"/{value.user.role === "admin"/g' release-source/src/components/client/AuthProvider.tsx
+          sed -i 's/"publishedAt": "2026-08-00"/"publishedAt": "2026-08-01"/g' release-source/src/content/posts.json
           node -e "const p=require('./release-source/package.json'); console.log('release package version:', p.version)"
 
       - name: Setup Node
