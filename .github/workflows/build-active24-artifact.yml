@@ -1,0 +1,48 @@
+name: Prepare local build dependencies
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout build branch
+        uses: actions/checkout@v4
+
+      - name: Reconstruct source for package metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .text-source/chunk*.b64 | base64 --decode > /tmp/janafitness-text-source.tar.xz
+          echo "12f7342d1e883ecff324a88142648076a07ce5569723f5db282516d584ece529  /tmp/janafitness-text-source.tar.xz" | sha256sum -c -
+          mkdir release-source
+          tar -xJf /tmp/janafitness-text-source.tar.xz -C release-source
+          test -f release-source/package.json
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: release-source
+        run: npm install --no-audit --no-fund
+
+      - name: Package dependencies
+        shell: bash
+        run: tar -czf janafitness-node-modules-v070.tgz -C release-source node_modules package-lock.json
+
+      - name: Upload dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: janafitness-node-modules-v070
+          path: janafitness-node-modules-v070.tgz
+          if-no-files-found: error
+          retention-days: 1
